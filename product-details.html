@@ -169,6 +169,11 @@
                                 <!-- Product Meta Data -->
                                 <div class="product-meta-data">
                                     <div class="line"></div>
+                                    <h2 class="product-title"></h2>
+                                    <p class="product-price"></p>
+                                    <p class="product-desc"></p>
+                                    <img class="product-img" width="300">
+
                                     <p class="product-price">$180</p>
                                     <a href="product-details.html">
                                         <h6>White Modern Chair</h6>
@@ -213,6 +218,7 @@
                                     </div>
                                     <button type="submit" name="addtocart" value="5" class="btn amado-btn">Add to
                                         cart</button>
+                                    <button id="buyBtn" class="btn btn-success">Buy Now on WhatsApp</button>
                                 </form>
 
                             </div>
@@ -311,7 +317,56 @@
         </footer>
         <!-- ##### Footer Area End ##### -->
     </div>
+    <script src="js/product.js"></script>
+
+    <script>
+        function getProductID() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get("id");
+        }
+
+        function loadProduct() {
+            const id = getProductID();
+            const product = products.find(p => p.id == id);
+
+            if (!product) return;
+
+            document.querySelector(".product-title").innerText = product.name;
+            document.querySelector(".product-price").innerText = "₹ " + product.price;
+            document.querySelector(".product-desc").innerText = product.desc;
+            document.querySelector(".product-img").src = product.img;
+
+            // store globally for WhatsApp
+            window.currentProduct = product;
+        }
+
+        loadProduct();
+    </script>
+
     <!-- ##### jQuery (Necessary for All JavaScript Plugins) ##### -->
+    <script>
+        document.getElementById("buyBtn").addEventListener("click", function () {
+
+            const p = window.currentProduct;
+
+            const message = `
+        Hello, I want to order👇
+        
+        🪑 Product: ${p.name}
+        💰 Price: ₹${p.price}
+        📦 Product ID: ${p.id}
+        
+        Please share delivery steps.
+            `;
+
+            const whatsappNumber = "+918849490986";
+
+            const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+            window.open(url, "_blank");
+        });
+    </script>
+
     <script src="js/jquery/jquery-2.2.4.min.js"></script>
     <!-- Popper js -->
     <script src="js/popper.min.js"></script>
