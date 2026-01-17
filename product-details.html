@@ -54,7 +54,7 @@
             <div class="mobile-nav">
                 <!-- Navbar Brand -->
                 <div class="amado-navbar-brand">
-                    <a href="index.html"><img src="img/core-img/logo.png" alt=""></a>
+                    <a href="index.html"><img src="img/core-img/bfs-logo.png" alt=""></a>
                 </div>
                 <!-- Navbar Toggler -->
                 <div class="amado-navbar-toggler">
@@ -70,7 +70,7 @@
                 </div>
                 <!-- Logo -->
                 <div class="logo">
-                    <a href="index.html"><img src="img/core-img/logo.png" alt=""></a>
+                    <a href="index.html"><img src="img/core-img/bfs-logo.png" alt=""></a>
                 </div>
                 <!-- Amado Nav -->
                 <nav class="amado-nav">
@@ -210,7 +210,7 @@
                                                 onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i
                                                     class="fa fa-caret-down" aria-hidden="true"></i></span>
                                             <input type="number" class="qty-text" id="qty" step="1" min="1" max="300"
-                                                name="quantity" value="1">
+                                                name="quantity" value="1" oninput="window.currentProduct.quantity = this.value">
                                             <span class="qty-plus"
                                                 onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i
                                                     class="fa fa-caret-up" aria-hidden="true"></i></span>
@@ -266,7 +266,7 @@
                         <div class="single_widget_area">
                             <!-- Logo -->
                             <div class="footer-logo mr-50">
-                                <a href="index.html"><img src="img/core-img/logo2.png" alt=""></a>
+                                <a href="index.html"><img src="img/core-img/bfs-logo.png" alt=""></a>
                             </div>
                             <!-- Copywrite Text -->
                             <p class="copywrite">Copyright &copy; <script>document.write(new Date().getFullYear());</script> All rights reserved</p>
@@ -330,6 +330,7 @@
             document.querySelector(".product-img").src = product.img;
 
             // store globally for WhatsApp
+            product.quantity = 1;
             window.currentProduct = product;
         }
 
@@ -338,22 +339,24 @@
 
     <!-- ##### jQuery (Necessary for All JavaScript Plugins) ##### -->
     <script>
-        document.getElementById("buyBtn").addEventListener("click", function () {
+        document.getElementById("buyBtn").addEventListener("click", function (e) {
+            e.preventDefault(); // Prevent form submission if necessary
 
             const p = window.currentProduct;
+            // Grab the LATEST value from the input field directly
+            const selectedQty = document.getElementById('qty').value;
 
             const message = `
-        Hello, I want to order👇
-        
-        🪑 Product: ${p.name}
-        💰 Price: ₹${p.price}
-        📦 Product ID: ${p.id}
-        
-        Please share delivery steps.
-            `;
+Hello, I want to order👇
+
+🪑 Product: ${p.name}
+💰 Price: ₹${p.price * selectedQty}
+📦 Product ID: ${p.id}
+🛒 Quantity: ${selectedQty}
+
+Please share delivery steps.`;
 
             const whatsappNumber = "+919510660170";
-
             const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
             window.open(url, "_blank");
